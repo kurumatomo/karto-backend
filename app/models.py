@@ -102,24 +102,57 @@ class TrustedGasStation(Base):
 class GasPrice(Base):
     __tablename__ = "gas_price"
 
+    # Gas price id
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    # station_id
-    # gas_type_id
-
-    # Also needs to be set to unsigned
+    # station id
+    station_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    # price_per_gal
     price: Mapped[PyDecimal] = mapped_column(DECIMAL(7,4), nullable=False)
-
-    # Need to figure out updated time func call work thing
     last_updated: Mapped[date] = mapped_column()
+
+    # Relationships
+    # stationid - gas station
+    # gas price - gas type
 
 class GasType(Base):
     __tablename__ = "gas_types"
 
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)    
+    name: Mapped[str] = mapped_column(String(15), nullable=False)
+
+    # Relationships
+    # gas type - gas price
+    # gas type - car
+
 class Maintenance(Base):
     __tablename__ = "maintenance"
 
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    car_id: Mapped[int] = mapped_column(ForeignKey("car.id"), nullable=False)
+    date: Mapped[date] = mapped_column(Date, nullable=False)
+
+    # Needs to b e unsigned
+    mileage: Mapped[int] = mapped_column()
+
+    # Needs to be unsigned
+    cost: Mapped[PyDecimal] = mapped_column(DECIMAL(7,4), nullable=False)
+
+    # Relationships
+    # maintenance - maintenance item detail
+    # maintenance - car id
+
 class MaintenanceDetail(Base):
     __tablename__ = "maintenance_item_details"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, nullable=False)
+
+    # Will implement these later
+    maintenance_id: Mapped[int] = mapped_column()
+    maintenance_type_id: Mapped[int] = mapped_column()
+
+    # This needs to be a tinyint
+    quantity: Mapped[int] = mapped_column()
+    comments: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
 class MaintenanceTypeDescription(Base):
     __tablename__ = "maintenance_type_description"

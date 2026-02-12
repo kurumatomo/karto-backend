@@ -157,5 +157,17 @@ class MaintenanceDetail(Base):
 class MaintenanceTypeDescription(Base):
     __tablename__ = "maintenance_type_description"
 
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(30), nullable=False)
+
+    # Relationship
+    # maintenance description - Maintenance item detail
+
 class MaintenanceRecipt(Base):
     __tablename__ = "maintenance_recipts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    image: Mapped[bytes | None] = mapped_column(LargeBinary)
+
+    # Relationship
+    # Recipt to car
